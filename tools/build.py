@@ -349,6 +349,14 @@ def build_glyph(glyph_set, name: str, role: str, bold_d: float = 0.0):
             coords[i] = (0.0, y)
         elif x > CELL:
             coords[i] = (CELL, y)
+    # Let connectors overlap their neighbour by two units.  Without this the
+    # two antialiased cell edges meet exactly and leave a hairline seam on
+    # long tatweel runs and on joined letters.
+    for i, (x, y) in enumerate(coords):
+        if x == 0.0:
+            coords[i] = (-2.0, y)
+        elif x == CELL:
+            coords[i] = (CELL + 2.0, y)
     glyph.coordinates = coords
     return glyph, sx, sy, dx, dy
 
